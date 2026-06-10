@@ -44,7 +44,7 @@ Para clonar e rodar esta base do projeto em sua máquina local, siga os passos a
 
 ```bash
 # 1. Clone o repositório
-git clone [https://github.com/renPaiva-dev/StockMaster do GitHub da equipe]
+git clone https://github.com/renPaiva-dev/StockMaster
 
 # 2. Entre na pasta do projeto
 cd meu-projeto-es2
