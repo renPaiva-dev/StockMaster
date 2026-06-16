@@ -1,0 +1,7 @@
+com\stockMaster\service\ProdutoService.class
+com\stockMaster\dto\ProdutoRequestDTO.class
+com\stockMaster\StockMasterApplication.class
+com\stockMaster\controller\ProdutoController.class
+com\stockMaster\dto\ProdutoResponseDTO.class
+com\stockMaster\repository\ProdutoRepository.class
+com\stockMaster\entity\Produto.class

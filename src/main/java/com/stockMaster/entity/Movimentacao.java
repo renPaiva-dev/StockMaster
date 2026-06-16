@@ -1,36 +1,34 @@
 package com.stockMaster.entity;
 
-
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-
-import java.math.BigDecimal;
+import com.stockMaster.enums.TipoMovimentacao;
+import java.time.LocalDateTime;
 
 @Entity
-@Table(name = "produto")
+@Table(name = "movimentacao")
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class Produto {
+public class Movimentacao {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(nullable = false, unique = true)
-    private String nome;
-
+    @Enumerated(EnumType.STRING)
     @Column(nullable = false)
-    private BigDecimal preco;
+    private TipoMovimentacao tipo;
 
     @Column(nullable = false)
     private Integer quantidade;
 
-    @Column
-    private String descricao;
-
     @Column(nullable = false)
-    private Integer estoqueMinimo;
+    private LocalDateTime dataHora;
+
+    @ManyToOne
+    @JoinColumn(name = "produto_id", nullable = false)
+    private Produto produto;
 }
