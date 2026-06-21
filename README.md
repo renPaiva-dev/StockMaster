@@ -204,6 +204,4 @@ src/main/java/com/stockMaster/
 - Banco H2 em memória: os dados são perdidos a cada reinicialização da aplicação
 - Sem interface gráfica — testes feitos via Postman, curl ou Swagger UI
 
-## Equipe
 
-Projeto desenvolvido para a disciplina de Engenharia de Software II.
