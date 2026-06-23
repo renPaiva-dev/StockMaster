@@ -5,10 +5,12 @@ import com.stockMaster.dto.MovimentacaoResponseDTO;
 import com.stockMaster.entity.Movimentacao;
 import com.stockMaster.entity.Produto;
 import com.stockMaster.enums.TipoMovimentacao;
+import com.stockMaster.event.EstoqueCriticoEvent;
 import com.stockMaster.exception.EstoqueInsuficienteException;
 import com.stockMaster.exception.ProdutoNaoEncontradoException;
 import com.stockMaster.repository.MovimentacaoRepository;
 import com.stockMaster.repository.ProdutoRepository;
+import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -20,11 +22,14 @@ public class MovimentacaoService {
 
     private final MovimentacaoRepository movimentacaoRepository;
     private final ProdutoRepository produtoRepository;
+    private final ApplicationEventPublisher eventPublisher;
 
     public MovimentacaoService(MovimentacaoRepository movimentacaoRepository,
-                               ProdutoRepository produtoRepository) {
+                               ProdutoRepository produtoRepository,
+                               ApplicationEventPublisher eventPublisher) {
         this.movimentacaoRepository = movimentacaoRepository;
         this.produtoRepository = produtoRepository;
+        this.eventPublisher = eventPublisher;
     }
 
     @Transactional
@@ -44,6 +49,7 @@ public class MovimentacaoService {
         Movimentacao salva = movimentacaoRepository.save(movimentacao);
         return toDTO(salva);
     }
+
     @Transactional
     public MovimentacaoResponseDTO registrarSaida(MovimentacaoRequestDTO dto) {
         Produto produto = produtoRepository.findById(dto.produtoId())
@@ -55,6 +61,8 @@ public class MovimentacaoService {
 
         produto.setQuantidade(produto.getQuantidade() - dto.quantidade());
         produtoRepository.save(produto);
+
+        verificarEstoqueCritico(produto);
 
         Movimentacao movimentacao = new Movimentacao();
         movimentacao.setTipo(TipoMovimentacao.SAIDA);
@@ -74,6 +82,19 @@ public class MovimentacaoService {
                 .stream()
                 .map(this::toDTO)
                 .toList();
+    }
+
+    public List<MovimentacaoResponseDTO> listarTodas() {
+        return movimentacaoRepository.findAll()
+                .stream()
+                .map(this::toDTO)
+                .toList();
+    }
+
+    private void verificarEstoqueCritico(Produto produto) {
+        if (produto.getQuantidade() <= produto.getEstoqueMinimo()) {
+            eventPublisher.publishEvent(new EstoqueCriticoEvent(this, produto));
+        }
     }
 
     private MovimentacaoResponseDTO toDTO(Movimentacao m) {
