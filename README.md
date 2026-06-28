@@ -1,5 +1,5 @@
 # StockMaster
-
+Link do video de apresentacao: https://youtu.be/wgA9E_2KUSE
 Sistema de controle de estoque e vendas desenvolvido para a disciplina de Engenharia de Software II. Permite o cadastro de produtos, registro de entradas e saídas de mercadorias, processamento de vendas e geração de relatórios gerenciais.
 
 O sistema não possui interface gráfica. Toda a interação é feita via API REST, testável por Postman ou pela interface Swagger.
